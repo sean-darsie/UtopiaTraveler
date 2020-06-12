@@ -6,9 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.IdClass;
+
 
 @Entity
 @Table(name="tbl_booking")
+@IdClass(BookingPk.class)
 public class Booking implements Serializable{
 
 	private static final long serialVersionUID = 746930832725324533L;

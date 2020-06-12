@@ -67,10 +67,10 @@ public class Airport implements Serializable {
 	public void setAirportId(Integer airportId) {
 		this.airportId = airportId;
 	}
-	public String getCity() {
+	public String getName() {
 		return name;
 	}
-	public void setCity(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
