@@ -5,22 +5,18 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 
 @Entity
-@Table(name="tbl_booking")
+@Table(name="tbl_flight")
 @IdClass(FlightPk.class)
 public class Flight implements Serializable{
 
 	private static final long serialVersionUID = 6602255558264085748L;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="flightId")
 	private Integer flightId;
 	
@@ -32,6 +28,7 @@ public class Flight implements Serializable{
 	@Column(name="arriveId")
 	private Integer arriveId;
 	
+	@Id
 	@Column(name="departTime")
 	private Timestamp departTime;
 	
