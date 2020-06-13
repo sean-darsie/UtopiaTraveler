@@ -32,4 +32,38 @@ public class BookingService {
 		
 		return bookings;
 	}
+	
+	/**
+	 * 
+	 * @param bookerId
+	 * @param active
+	 * @return
+	 */
+	public List<Booking> readBookingByBookerId(int bookerId, boolean active) {
+		List<Booking> bookings = bookingDAO.
+				findAll().
+				stream().
+				filter(b -> b.isActive() == active).
+				filter(b -> b.getBookerId() == bookerId).
+				collect(Collectors.toList()); 
+		
+		return bookings;
+	}
+	
+	/**
+	 * 
+	 * @param travelerId
+	 * @param active
+	 * @return
+	 */
+	public List<Booking> readBookingByTravelerId(int travelerId, boolean active) {
+		List<Booking> bookings = bookingDAO.
+				findAll().
+				stream().
+				filter(b -> b.isActive() == active).
+				filter(b -> b.getTravelerId() == travelerId).
+				collect(Collectors.toList()); 
+		
+		return bookings;
+	}
 }

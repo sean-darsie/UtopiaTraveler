@@ -6,9 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.ss.training.utopia.entity.Flight;
+import com.ss.training.utopia.entity.FlightPk;
 
 @Repository
-public interface FlightDAO extends JpaRepository<Flight, Long> {
+public interface FlightDAO extends JpaRepository<Flight, FlightPk> {
 	/**
 	 * 
 	 * @param departCityId
