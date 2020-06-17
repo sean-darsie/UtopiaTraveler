@@ -18,12 +18,13 @@ public class FlightController {
 	@Autowired
 	FlightService flightService;
 	
+	
 	@RequestMapping(path="/utopia/traveler/flights")
-	public ResponseEntity<Flight[]> readFlights() {
+	public ResponseEntity<Flight[]> readAvailableFlights() {
 		HttpStatus status = HttpStatus.OK;
 		Flight[] flightArray = null;
 		
-		List<Flight> flights = flightService.readFlights();
+		List<Flight> flights = flightService.readAvailableFlights();
 		
 		if (flights.size() < 1 || flights == null) {
 			status = HttpStatus.NOT_FOUND;
