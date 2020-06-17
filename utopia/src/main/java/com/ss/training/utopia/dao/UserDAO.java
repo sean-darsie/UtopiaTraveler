@@ -7,5 +7,5 @@ import com.ss.training.utopia.entity.User;
 
 @Repository
 public interface UserDAO extends JpaRepository<User, Long> {
-
+	User findByUserId(Integer userId);
 }
