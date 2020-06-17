@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 public class FlightPk implements Serializable {
-	
-	private static final long serialVersionUID = 1297844420977268568L;
-	
-	Integer departId;
-	Integer arriveId;
-	Timestamp departTme;
+		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8483614852903557043L;
+	Long departId;
+	Long arriveId;
+	Timestamp departTime;
 	
 	@Override
 	public int hashCode() {
@@ -17,10 +19,19 @@ public class FlightPk implements Serializable {
 		int result = 1;
 		result = prime * result + ((arriveId == null) ? 0 : arriveId.hashCode());
 		result = prime * result + ((departId == null) ? 0 : departId.hashCode());
-		result = prime * result + ((departTme == null) ? 0 : departTme.hashCode());
+		result = prime * result + ((departTime == null) ? 0 : departTime.hashCode());
 		return result;
 	}
 	
+	public FlightPk(Long departId, Long arriveId, Timestamp departTime) {
+		this.departId = departId;
+		this.arriveId = arriveId;
+		this.departTime = departTime;
+	}
+	
+	public FlightPk() {}
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -40,10 +51,10 @@ public class FlightPk implements Serializable {
 				return false;
 		} else if (!departId.equals(other.departId))
 			return false;
-		if (departTme == null) {
-			if (other.departTme != null)
+		if (departTime == null) {
+			if (other.departTime != null)
 				return false;
-		} else if (!departTme.equals(other.departTme))
+		} else if (!departTime.equals(other.departTime))
 			return false;
 		return true;
 	}

@@ -27,7 +27,7 @@ public class FlightService {
 	 * @param arriveId
 	 * @return a list of flights from depart city to arrive city past today's date.
 	 */
-	public List<Flight> readFlightsByDestination(Integer departId,Integer arriveId){
+	public List<Flight> readFlightsByDestination(Long departId,Long arriveId){
 		List<Flight> flights = flightDAO.
 				findAll().
 				stream().
@@ -36,6 +36,16 @@ public class FlightService {
 				collect(Collectors.toList());
 		
 		return flights;
+	}
+	
+	public Flight[] getBookableFlights(Long departId, Long arriveId, Long travelerId) {
+		List<Flight> flights;
+		try {
+			flights = flightDAO.findBookableFlights(departId, arriveId, travelerId);
+		} catch (Throwable t) {
+			return null;
+		}
+		return flights.toArray(new Flight[flights.size()]);
 	}
 	
 	/**

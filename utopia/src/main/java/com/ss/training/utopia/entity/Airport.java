@@ -20,28 +20,32 @@ public class Airport implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="airportId")
-	private Integer airportId;
+	private Long airportId;
 	
 	@Column(name="name")
 	private String name;
 
 	
-	public Airport(Integer airportId, String name) {
+	public Airport(Long airportId, String name) {
 		super();
 		this.airportId = airportId;
 		this.name = name;
 	}
 	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		Integer result = 1;
-		result = prime * result + airportId;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	public Airport() {
 	}
 	
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((airportId == null) ? 0 : airportId.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -51,7 +55,10 @@ public class Airport implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Airport other = (Airport) obj;
-		if (airportId != other.airportId)
+		if (airportId == null) {
+			if (other.airportId != null)
+				return false;
+		} else if (!airportId.equals(other.airportId))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -60,11 +67,12 @@ public class Airport implements Serializable {
 			return false;
 		return true;
 	}
-	
-	public Integer getAirportId() {
+
+
+	public Long getAirportId() {
 		return airportId;
 	}
-	public void setAirportId(Integer airportId) {
+	public void setAirportId(Long airportId) {
 		this.airportId = airportId;
 	}
 	public String getName() {

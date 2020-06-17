@@ -10,5 +10,5 @@ import com.ss.training.utopia.entity.BookingPk;
 
 @Repository
 public interface BookingDAO extends JpaRepository<Booking, BookingPk> {
-	List<Booking> findBookingsById(int travelerId);
+
 }

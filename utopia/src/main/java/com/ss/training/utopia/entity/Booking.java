@@ -42,7 +42,9 @@ public class Booking implements Serializable{
 		this.active = active;
 		this.stripeId = stripeId;
 	}
-
+	
+	public Booking() {}
+	
 	public Integer getFlightId() {
 		return flightId;
 	}
