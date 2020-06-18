@@ -17,16 +17,16 @@ public class Booking implements Serializable{
 	private static final long serialVersionUID = 746930832725324533L;
 	
 	@Id
-	@Column(name="flightId")
-	private Integer flightId;
+	@Column(name="travelerId")
+	private Long travelerId;
 	
 	@Id
-	@Column(name="travelerId")
-	private Integer travelerId;
+	@Column(name="flightId")
+	private Long flightId;
 	
 	@Id
 	@Column(name="bookerId")
-	private Integer bookerId;
+	private Long bookerId;
 	
 	@Column(name="active")
 	private boolean active;
@@ -34,7 +34,7 @@ public class Booking implements Serializable{
 	@Column(name="stripeId")
 	private String stripeId;
 	
-	public Booking(Integer flightId, Integer travelerId, Integer bookerId, boolean active, String stripeId) {
+	public Booking(Long travelerId, Long flightId, Long bookerId, boolean active, String stripeId) {
 		super();
 		this.flightId = flightId;
 		this.travelerId = travelerId;
@@ -45,27 +45,27 @@ public class Booking implements Serializable{
 	
 	public Booking() {}
 	
-	public Integer getFlightId() {
+	public Long getFlightId() {
 		return flightId;
 	}
 
-	public void setFlightId(Integer flightId) {
+	public void setFlightId(Long flightId) {
 		this.flightId = flightId;
 	}
 
-	public Integer getTravelerId() {
+	public Long getTravelerId() {
 		return travelerId;
 	}
 
-	public void setTravelerId(Integer travelerId) {
+	public void setTravelerId(Long travelerId) {
 		this.travelerId = travelerId;
 	}
 
-	public Integer getBookerId() {
+	public Long getBookerId() {
 		return bookerId;
 	}
 
-	public void setBookerId(Integer bookerId) {
+	public void setBookerId(Long bookerId) {
 		this.bookerId = bookerId;
 	}
 
@@ -88,12 +88,12 @@ public class Booking implements Serializable{
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		Integer result = 1;
+		int result = 1;
 		result = prime * result + (active ? 1231 : 1237);
-		result = prime * result + bookerId;
-		result = prime * result + flightId;
+		result = prime * result + ((bookerId == null) ? 0 : bookerId.hashCode());
+		result = prime * result + ((flightId == null) ? 0 : flightId.hashCode());
 		result = prime * result + ((stripeId == null) ? 0 : stripeId.hashCode());
-		result = prime * result + travelerId;
+		result = prime * result + ((travelerId == null) ? 0 : travelerId.hashCode());
 		return result;
 	}
 
@@ -108,16 +108,25 @@ public class Booking implements Serializable{
 		Booking other = (Booking) obj;
 		if (active != other.active)
 			return false;
-		if (bookerId != other.bookerId)
+		if (bookerId == null) {
+			if (other.bookerId != null)
+				return false;
+		} else if (!bookerId.equals(other.bookerId))
 			return false;
-		if (flightId != other.flightId)
+		if (flightId == null) {
+			if (other.flightId != null)
+				return false;
+		} else if (!flightId.equals(other.flightId))
 			return false;
 		if (stripeId == null) {
 			if (other.stripeId != null)
 				return false;
 		} else if (!stripeId.equals(other.stripeId))
 			return false;
-		if (travelerId != other.travelerId)
+		if (travelerId == null) {
+			if (other.travelerId != null)
+				return false;
+		} else if (!travelerId.equals(other.travelerId))
 			return false;
 		return true;
 	}

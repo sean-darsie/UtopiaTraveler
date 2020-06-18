@@ -22,11 +22,11 @@ public class UserService {
 		return true;
 	}
 	
-	public User findUserById(Integer userId) {
+	public User findUserById(String username) {
 		User user = null;
 		
 		try { 
-			user = userDAO.findByUserId(userId);
+			user = userDAO.findByUsername(username);
 		} catch (Throwable t) { 
 			return  null;
 		}

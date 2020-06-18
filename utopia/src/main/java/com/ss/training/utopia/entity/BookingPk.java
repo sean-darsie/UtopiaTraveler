@@ -6,9 +6,9 @@ public class BookingPk implements Serializable {
 	
 	private static final long serialVersionUID = 1125044906555366554L;
 	
-	Integer flightId;
-	Integer travelerId;
-	Integer bookerId;
+	Long flightId;
+	Long travelerId;
+	Long bookerId;
 
 	
 	@Override

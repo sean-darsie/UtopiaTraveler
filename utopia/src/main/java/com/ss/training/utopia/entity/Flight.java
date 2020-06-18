@@ -145,6 +145,15 @@ public class Flight implements Serializable {
 		return true;
 	}
 
+	/**
+	 * 
+	 * @param departId
+	 * @param arriveId
+	 * @param departTime
+	 * @param seatsAvailable
+	 * @param price
+	 * @param flightId
+	 */
 	public Flight(Long departId, Long arriveId, Timestamp departTime, Integer seatsAvailable, Float price,
 			Long flightId) {
 		super();

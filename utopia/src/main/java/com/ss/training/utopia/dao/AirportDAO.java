@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AirportDAO extends JpaRepository<Airport, Long> {
-	Airport findByAirportId(Integer airportId);
+	Airport findByAirportId(Long airportId);
 }

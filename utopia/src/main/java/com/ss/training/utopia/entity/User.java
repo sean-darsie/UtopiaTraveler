@@ -20,11 +20,12 @@ public class User implements Serializable {
 	@Column(name="userId")
 	Long userId;
 	
-	@Column(name="name")
-	String name;
 	
 	@Column(name="username")
 	String username;
+	
+	@Column(name="name")
+	String name;
 	
 	@Column(name="password")
 	String password;
@@ -32,11 +33,11 @@ public class User implements Serializable {
 	@Column(name="role")
 	String role;
 	
-	public User(Long userId, String name, String username, String password, String role) {
+	public User(Long userId, String username, String name, String password, String role) {
 		super();
 		this.userId = userId;
-		this.name = name;
 		this.username = username;
+		this.name = name;
 		this.password = password;
 		this.role = role;
 	}
