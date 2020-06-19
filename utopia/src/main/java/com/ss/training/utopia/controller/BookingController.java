@@ -25,31 +25,42 @@ public class BookingController {
 	final String basePath = "/utopia/traveler/";
 	
 	@PostMapping(path=basePath+"bookings")
-	public ResponseEntity<String> createBooking(@RequestBody Booking booking) {
+	public ResponseEntity<Booking> createBooking(@RequestBody Booking booking) {
 		HttpStatus status = HttpStatus.CREATED;
-		String response = "???";
-		System.out.println("Flight arrive Id "+booking.getFlightId());
-
+		Booking ticket = null;
 		try {
-			boolean booked = bookingService.purchaseFlight(booking.getFlightId(), booking.getBookerId(), booking.getTravelerId(), booking.getStripeId());
-			if (booked == true)
-				response = "Created";
+			ticket = bookingService.purchaseFlight(booking.getFlightId(), booking.getBookerId(), booking.getTravelerId(), booking.getStripeId());				
 		} catch(Exception e) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
-			response = "failed to book flight";
+		}
+		
+		return new ResponseEntity<Booking>(ticket, status);
+	}
+	
+	@PutMapping(path=basePath+"bookings")
+	public ResponseEntity<String> cancelBooking(@RequestBody Booking booking) {
+		HttpStatus status = HttpStatus.ACCEPTED;
+		String response = "";
+		
+		try {
+			boolean canceled = bookingService.cancelFlight(booking);
+			if (canceled == true)
+				response = "Canceled";
+			else {
+				response = "error";
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+			}
+		} catch(Exception e) {
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			response = "failed to cancel flight";
 		}
 		
 		return new ResponseEntity<String>(response, status);
 	}
 	
-	@PutMapping(path=basePath+"bookings")
-	public ResponseEntity<String> updateBooking(@RequestBody Booking booking) {
-		bookingService.updateBooking(booking);
-		return new ResponseEntity<String>("good work m8", HttpStatus.ACCEPTED);
-	}
 	
-	
-	@RequestMapping(path =basePath+"bookings/{id}/purchased")
+	@RequestMapping(path =basePath+"bookings/purchasers/{id}")
 	public ResponseEntity<Booking[]> readPurchasedTickets(@PathVariable int bookerId) {
 		Booking[] bookings = null;
 		HttpStatus status = HttpStatus.OK;
@@ -61,8 +72,8 @@ public class BookingController {
 		return new ResponseEntity<Booking[]>(bookings, status);
 	}
 	
-	@RequestMapping(path = "/bookings/{id}/booked/{active}")
-	public ResponseEntity<Booking[]> readOwnedTickets(@PathVariable int travelerId, @PathVariable String active) {
+	@RequestMapping(path = "/bookings/travelers/{id}")
+	public ResponseEntity<Booking[]> readOwnedTickets(@PathVariable int travelerId) {
 		Booking[] bookings = null;
 		HttpStatus status = HttpStatus.OK;
 

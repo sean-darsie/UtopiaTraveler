@@ -31,4 +31,5 @@ public interface BookingDAO extends JpaRepository<Booking, BookingPk> {
 	public List<Booking> findAllByTravelerId(Long travelerId);
 	
 	
+	
 }
