@@ -7,11 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ss.training.utopia.entity.Booking;
+import com.ss.training.utopia.entity.Flight;
 import com.ss.training.utopia.service.BookingService;
 
 @RestController
@@ -23,32 +25,39 @@ public class BookingController {
 	final String basePath = "/utopia/traveler/";
 	
 	@PostMapping(path=basePath+"bookings")
-	public ResponseEntity<Booking> createBooking(@RequestBody Booking booking) {
+	public ResponseEntity<String> createBooking(@RequestBody Booking booking) {
 		HttpStatus status = HttpStatus.CREATED;
-		Booking response = booking;
-		
+		String response = "???";
+		System.out.println("Flight arrive Id "+booking.getFlightId());
+
 		try {
-			bookingService.saveBooking(booking);
+			boolean booked = bookingService.purchaseFlight(booking.getFlightId(), booking.getBookerId(), booking.getTravelerId(), booking.getStripeId());
+			if (booked == true)
+				response = "Created";
 		} catch(Exception e) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
-			response = null;
+			response = "failed to book flight";
 		}
 		
-		return new ResponseEntity<Booking>(response, status);
+		return new ResponseEntity<String>(response, status);
 	}
 	
-	@RequestMapping(path = "/bookings/{id}/purchased/{active}")
-	public ResponseEntity<Booking[]> readPurchasedTickets(@PathVariable int bookerId, @PathVariable String active) {
+	@PutMapping(path=basePath+"bookings")
+	public ResponseEntity<String> updateBooking(@RequestBody Booking booking) {
+		bookingService.updateBooking(booking);
+		return new ResponseEntity<String>("good work m8", HttpStatus.ACCEPTED);
+	}
+	
+	
+	@RequestMapping(path =basePath+"bookings/{id}/purchased")
+	public ResponseEntity<Booking[]> readPurchasedTickets(@PathVariable int bookerId) {
 		Booking[] bookings = null;
 		HttpStatus status = HttpStatus.OK;
 
-		List<Booking> listOfBookings = bookingService.readBookingByBookerId(bookerId, active == "active");
-		if (listOfBookings == null)
+		bookings = bookingService.readActiveBookingByBookerId(bookerId);
+		if (bookings == null)
 			status = HttpStatus.NOT_FOUND;
-		else {
-			bookings = listOfBookings.toArray(new Booking[listOfBookings.size()]);
-		}
-
+	
 		return new ResponseEntity<Booking[]>(bookings, status);
 	}
 	
@@ -57,12 +66,9 @@ public class BookingController {
 		Booking[] bookings = null;
 		HttpStatus status = HttpStatus.OK;
 
-		List<Booking> listOfBookings = bookingService.readBookingByTravelerId(travelerId, active == "active");
-		if (listOfBookings == null) // no author with the specified ID exists
+		bookings = bookingService.readActiveBookingByTravelerId(travelerId);
+		if (bookings == null || bookings.length < 1) // no author with the specified ID exists
 			status = HttpStatus.NOT_FOUND;
-		else {
-			bookings = listOfBookings.toArray(new Booking[listOfBookings.size()]);
-		}
 
 		return new ResponseEntity<Booking[]>(bookings, status);
 	}
