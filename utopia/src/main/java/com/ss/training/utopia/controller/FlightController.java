@@ -36,21 +36,17 @@ public class FlightController {
 		return new ResponseEntity<Flight[]>(flightArray, status);
 	}
 	
-	@RequestMapping(path="/utopia/traveler/flights/departs/{departId}/arrives/{arriveId}")
-	public ResponseEntity<Flight[]> readFlightsByDestination(@PathVariable Long departId, @PathVariable Long arriveId) {
+	@RequestMapping(path="/utopia/traveler/travelers/{travelerId}/flights/departs/{departId}/arrives/{arriveId}")
+	public ResponseEntity<Flight[]> readFlightsByDestination(@PathVariable Long departId, @PathVariable Long arriveId, @PathVariable Long travelerId) {
 		HttpStatus status = HttpStatus.OK;
-		Flight[] flightArray = null;
 		
-		List<Flight> flights = flightService.readFlightsByDestination(departId, arriveId);
+		Flight[] flights = flightService.getBookableFlights(departId, arriveId, travelerId);
 		
-		if (flights.size() < 1 || flights == null) {
+		if (flights.length < 1 || flights == null) {
 			status = HttpStatus.NOT_FOUND;
 		}
-		else {
-			flightArray = flights.toArray(new Flight[flights.size()]);
-		}
 		
-		return new ResponseEntity<Flight[]>(flightArray, status);
+		return new ResponseEntity<Flight[]>(flights, status);
 	}
 	
 	@RequestMapping(path="/utopia/traveler/{travelerId}/flights/departs{departId}/arrives{arriveId}")

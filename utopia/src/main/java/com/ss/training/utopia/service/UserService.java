@@ -14,20 +14,34 @@ public class UserService {
 	
 	public boolean createUser(User user) {
 		
+		if (user.getUserId() != null) {
+			return false;
+		}
+		
 		try {
 			userDAO.save(user);
-		} catch (Throwable t) {
+		} catch (Exception t) {
 			return false;
 		}
 		return true;
 	}
 	
-	public User findUserById(String username) {
+	public boolean updateUser(User user) {
+		
+		try {
+			userDAO.save(user);
+		} catch (Exception t) {
+			return false;
+		}
+		return true;
+	}
+	
+	public User findUserByUsername(String username) {
 		User user = null;
 		
 		try { 
 			user = userDAO.findByUsername(username);
-		} catch (Throwable t) { 
+		} catch (Exception t) { 
 			return  null;
 		}
 		

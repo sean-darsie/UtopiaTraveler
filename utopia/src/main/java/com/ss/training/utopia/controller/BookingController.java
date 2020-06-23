@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ss.training.utopia.entity.Booking;
 import com.ss.training.utopia.entity.Flight;
 import com.ss.training.utopia.service.BookingService;
+import com.stripe.exception.StripeException;
 
 @RestController
 public class BookingController {
@@ -51,7 +52,7 @@ public class BookingController {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 
 			}
-		} catch(Exception e) {
+		} catch(StripeException e) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 			response = "failed to cancel flight";
 		}
@@ -67,7 +68,7 @@ public class BookingController {
 
 		bookings = bookingService.readActiveBookingByBookerId(bookerId);
 		if (bookings == null)
-			status = HttpStatus.NOT_FOUND;
+			status = HttpStatus.NO_CONTENT;
 	
 		return new ResponseEntity<Booking[]>(bookings, status);
 	}
@@ -79,7 +80,7 @@ public class BookingController {
 
 		bookings = bookingService.readActiveBookingByTravelerId(travelerId);
 		if (bookings == null || bookings.length < 1) // no author with the specified ID exists
-			status = HttpStatus.NOT_FOUND;
+			status = HttpStatus.NO_CONTENT;
 
 		return new ResponseEntity<Booking[]>(bookings, status);
 	}

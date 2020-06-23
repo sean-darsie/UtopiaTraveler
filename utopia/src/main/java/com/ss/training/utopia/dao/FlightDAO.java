@@ -30,14 +30,14 @@ public interface FlightDAO extends JpaRepository<Flight, FlightPk> {
 	 * Reduce the number of seats available by 1
 	 * @param flightId
 	 */
-	@Query("UPDATE Flight SET seatsAvailable = seatsAvailable - 1 WHERE flightId = ?2")
+	@Query("UPDATE Flight SET seatsAvailable = seatsAvailable - 1 WHERE flightId = ?1")
 	public void reduceSeatsAvailable(Long flightId);
 	
 	/**
 	 * Increase the number of seats available by 1
 	 * @param flightId
 	 */
-	@Query("UPDATE Flight SET seatsAvailable = seatsAvailable + 1 WHERE flightId = ?2")
+	@Query("UPDATE Flight SET seatsAvailable = seatsAvailable + 1 WHERE flightId = ?1")
 	public void increaseSeatsAvailable(Long flightId);
 
 	public Flight findByFlightId(Long flightId);

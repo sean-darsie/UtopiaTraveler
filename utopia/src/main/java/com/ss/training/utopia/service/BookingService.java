@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ss.training.utopia.dao.BookingDAO;
 import com.ss.training.utopia.dao.FlightDAO;
@@ -79,8 +80,10 @@ public class BookingService {
 		return allBookings;
 	}
 	
+	@Transactional
 	public Booking purchaseFlight(long flightId, Long bookerId, Long travelerId, String token) {
 		Stripe.apiKey = "sk_test_51GvUChBYMFlMJbBRkCzD53Al0tYru5Zt7llUsjsbtfNH5TwY260VumPrZY6tK7481wgyUyTWalT1wQzQ2NNo5qTq00kZoYofR1";
+		Flight flight = flightDAO.findByFlightId(flightId);
 		Charge charge;
 		ChargeCreateParams params =
 				  ChargeCreateParams.builder()
@@ -99,24 +102,21 @@ public class BookingService {
 		System.out.println(charge.toString());
 		// create new booking to put in the database;
 		Booking newBooking = new Booking(travelerId, flightId, bookerId, true, charge.getId());
-
+		flight.setSeatsAvailable(flight.getSeatsAvailable() - 1);
+		
 		try {
 			bookingDAO.save(newBooking);
+			flightDAO.save(flight);
 		} catch (Exception e) {
 			return null;
 		}
-		
-		try {
-			flightDAO.reduceSeatsAvailable(flightId);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		
 		return newBooking;
 	}
 	
-	public boolean cancelFlight(Booking booking) {
+	@Transactional
+	public boolean cancelFlight(Booking booking) throws StripeException {
 		Stripe.apiKey = "sk_test_51GvUChBYMFlMJbBRkCzD53Al0tYru5Zt7llUsjsbtfNH5TwY260VumPrZY6tK7481wgyUyTWalT1wQzQ2NNo5qTq00kZoYofR1";
+		Flight flight = flightDAO.findByFlightId(booking.getFlightId());
 		
 		Map<String, Object> params = new HashMap<>();
 		params.put(
@@ -124,17 +124,12 @@ public class BookingService {
 		  booking.getStripeId()
 		);
 
-		try {
-			Refund refund = Refund.create(params);
-		} catch (StripeException e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		flightDAO.increaseSeatsAvailable(booking.getFlightId());
-		
+		Refund refund = Refund.create(params);
+		flight.setSeatsAvailable(flight.getSeatsAvailable() + 1);
+				
 		try {
 			bookingDAO.delete(booking);
+			flightDAO.save(flight);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
