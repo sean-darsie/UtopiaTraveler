@@ -18,14 +18,13 @@ import com.ss.training.utopia.service.BookingService;
 import com.stripe.exception.StripeException;
 
 @RestController
+@RequestMapping("/traveler")
 public class BookingController {
 	
 	@Autowired
 	BookingService bookingService;
-	
-	final String basePath = "/utopia/traveler/";
-	
-	@PostMapping(path=basePath+"bookings")
+		
+	@PostMapping(path="/bookings")
 	public ResponseEntity<Booking> createBooking(@RequestBody Booking booking) {
 		HttpStatus status = HttpStatus.CREATED;
 		Booking ticket = null;
@@ -38,9 +37,9 @@ public class BookingController {
 		return new ResponseEntity<Booking>(ticket, status);
 	}
 	
-	@PutMapping(path=basePath+"bookings")
+	@PutMapping(path="/bookings")
 	public ResponseEntity<String> cancelBooking(@RequestBody Booking booking) {
-		HttpStatus status = HttpStatus.ACCEPTED;
+		HttpStatus status = HttpStatus.NO_CONTENT;
 		String response = "";
 		
 		try {
@@ -61,7 +60,7 @@ public class BookingController {
 	}
 	
 	
-	@RequestMapping(path =basePath+"bookings/purchasers/{id}")
+	@RequestMapping(path="/bookings/purchasers/{id}")
 	public ResponseEntity<Booking[]> readPurchasedTickets(@PathVariable int bookerId) {
 		Booking[] bookings = null;
 		HttpStatus status = HttpStatus.OK;
@@ -79,7 +78,7 @@ public class BookingController {
 		HttpStatus status = HttpStatus.OK;
 
 		bookings = bookingService.readActiveBookingByTravelerId(travelerId);
-		if (bookings == null || bookings.length < 1) // no author with the specified ID exists
+		if (bookings == null || bookings.length < 1) 
 			status = HttpStatus.NO_CONTENT;
 
 		return new ResponseEntity<Booking[]>(bookings, status);

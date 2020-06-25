@@ -6,21 +6,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ss.training.utopia.entity.User;
 import com.ss.training.utopia.service.UserService;
 
 @RestController
+@RequestMapping(path="/traveler")
 public class UserController {
 
 	@Autowired
 	UserService userService;
 	
 	final int maxLength = 45;
-	final String basePath = "/utopia/traveler/";
 	
-	@PostMapping(path=basePath+"users")
+	@PostMapping(path="/users")
 	public ResponseEntity<User> createUser(@RequestBody User user) {
 		HttpStatus status = HttpStatus.CREATED;
 		
@@ -37,13 +38,12 @@ public class UserController {
 		}
 		
 		user.setPassword(null);
-		user.setUserId(null);
 		return new ResponseEntity<User>(user, status);
 	}
 	
-	@PutMapping(path=basePath+"users")
-	public ResponseEntity<User> updateeUser(@RequestBody User user) {
-		HttpStatus status = HttpStatus.ACCEPTED;
+	@PutMapping(path="/users")
+	public ResponseEntity<User> updateUser(@RequestBody User user) {
+		HttpStatus status = HttpStatus.NO_CONTENT;
 		
 		if (user.getUsername().length() > maxLength) {
 			status = HttpStatus.BAD_REQUEST;
@@ -57,7 +57,6 @@ public class UserController {
 			return new ResponseEntity<User>(user, status);
 		}
 		user.setPassword(null);
-		user.setUserId(null);
 		return new ResponseEntity<User>(user, status);
 	}
 }

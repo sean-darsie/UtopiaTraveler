@@ -68,16 +68,16 @@ public class BookingService {
 	 * @return
 	 */
 	public Booking[] readActiveBookingByTravelerId(long travelerId) {
-		Booking[] allBookings = null;
+		Booking[] activeBookings = null;
 		List<Booking> bookings;
 		try {
 			bookings = bookingDAO.findActiveBookingsByTravelerId(travelerId);
 		} catch (Exception e) {
-			return allBookings;
+			return activeBookings;
 		}
 		
-		allBookings = bookings.toArray(new Booking[bookings.size()]);
-		return allBookings;
+		activeBookings = bookings.toArray(new Booking[bookings.size()]);
+		return activeBookings;
 	}
 	
 	@Transactional
@@ -128,7 +128,8 @@ public class BookingService {
 		flight.setSeatsAvailable(flight.getSeatsAvailable() + 1);
 				
 		try {
-			bookingDAO.delete(booking);
+			booking.setActive(false);
+			bookingDAO.save(booking);
 			flightDAO.save(flight);
 		} catch (Exception e) {
 			e.printStackTrace();
