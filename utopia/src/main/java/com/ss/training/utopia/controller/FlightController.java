@@ -27,10 +27,12 @@ public class FlightController {
 		
 		List<Flight> flights = flightService.readAvailableFlights();
 		
-		if (flights.size() < 1 || flights == null) {
-			status = HttpStatus.NOT_FOUND;
+		if (flights == null) {
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
-		else {
+		if (flights.size() == 0) {
+			status = HttpStatus.NO_CONTENT;
+		} else {
 			flightArray = flights.toArray(new Flight[flights.size()]);
 		}
 		

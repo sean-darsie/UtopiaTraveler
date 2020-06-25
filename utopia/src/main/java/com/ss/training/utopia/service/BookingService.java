@@ -1,5 +1,6 @@
 package com.ss.training.utopia.service;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,35 +82,30 @@ public class BookingService {
 	}
 	
 	@Transactional
-	public Booking purchaseFlight(long flightId, Long bookerId, Long travelerId, String token) {
+	public Booking purchaseFlight(long flightId, Long bookerId, Long travelerId, String token) throws StripeException {
 		Stripe.apiKey = "sk_test_51GvUChBYMFlMJbBRkCzD53Al0tYru5Zt7llUsjsbtfNH5TwY260VumPrZY6tK7481wgyUyTWalT1wQzQ2NNo5qTq00kZoYofR1";
 		Flight flight = flightDAO.findByFlightId(flightId);
 		Charge charge;
+		
 		ChargeCreateParams params =
 				  ChargeCreateParams.builder()
-				    .setAmount(100L)
+				    .setAmount(100l)
 				    .setCurrency("usd")
 				    .setDescription("Example charge")
 				    .setSource(token)
 				    .build();
 		
-		try {
-			charge = Charge.create(params);
-		} catch (StripeException e) {
-			return null;
-		}
-		
+		charge = Charge.create(params);
+
 		System.out.println(charge.toString());
 		// create new booking to put in the database;
 		Booking newBooking = new Booking(travelerId, flightId, bookerId, true, charge.getId());
 		flight.setSeatsAvailable(flight.getSeatsAvailable() - 1);
 		
-		try {
-			bookingDAO.save(newBooking);
-			flightDAO.save(flight);
-		} catch (Exception e) {
-			return null;
-		}
+		
+		bookingDAO.save(newBooking);
+		flightDAO.save(flight);
+
 		return newBooking;
 	}
 	

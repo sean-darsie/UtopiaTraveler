@@ -44,7 +44,7 @@ public class BookingController {
 		
 		try {
 			boolean canceled = bookingService.cancelFlight(booking);
-			if (canceled == true)
+			if (canceled)
 				response = "Canceled";
 			else {
 				response = "error";
@@ -67,8 +67,11 @@ public class BookingController {
 
 		bookings = bookingService.readActiveBookingByBookerId(bookerId);
 		if (bookings == null)
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		if (bookings.length == 0) {
 			status = HttpStatus.NO_CONTENT;
-	
+		}
+		
 		return new ResponseEntity<Booking[]>(bookings, status);
 	}
 	
@@ -78,7 +81,9 @@ public class BookingController {
 		HttpStatus status = HttpStatus.OK;
 
 		bookings = bookingService.readActiveBookingByTravelerId(travelerId);
-		if (bookings == null || bookings.length < 1) 
+		if (bookings == null) 
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		if (bookings.length == 0) 
 			status = HttpStatus.NO_CONTENT;
 
 		return new ResponseEntity<Booking[]>(bookings, status);

@@ -21,7 +21,10 @@ public class AirportController {
 		HttpStatus status = HttpStatus.OK;
 		Airport[] airports = airportService.readAllAirports();
 		
-		if (airports == null || airports.length == 0) {
+		if (airports == null) {
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		if (airports.length == 0) {
 			status = HttpStatus.NO_CONTENT;
 		}
 				
