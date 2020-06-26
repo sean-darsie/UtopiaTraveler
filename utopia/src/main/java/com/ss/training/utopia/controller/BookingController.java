@@ -66,8 +66,10 @@ public class BookingController {
 		HttpStatus status = HttpStatus.OK;
 
 		bookings = bookingService.readActiveBookingByBookerId(bookerId);
-		if (bookings == null)
+		if (bookings == null) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			return new ResponseEntity<Booking[]>(bookings, status);
+		}
 		if (bookings.length == 0) {
 			status = HttpStatus.NO_CONTENT;
 		}

@@ -65,16 +65,22 @@ public class AirportControllerTest {
 		airportArray.add(airport2);
 		
 		Mockito.when(airportService.readAllAirports()).thenReturn(mockAirports);
-		
 		mockMvc.perform(MockMvcRequestBuilders.get("/traveler/airports")
 				  	.accept(MediaType.APPLICATION_JSON))
 					.andExpect(MockMvcResultMatchers.status().isOk())
 					.andExpect(MockMvcResultMatchers.content().json(airportArray.toString()));
+
+		Mockito.when(airportService.readAllAirports()).thenReturn(new Airport[0]);
+
+		mockMvc.perform(MockMvcRequestBuilders.get("/traveler/airports")
+			  	.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isNoContent());
 		
 		Mockito.when(airportService.readAllAirports()).thenReturn(null);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/traveler/airports")
 			  	.accept(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.status().isNoContent());
+				.andExpect(MockMvcResultMatchers.status().isInternalServerError());
+
 	}
 }

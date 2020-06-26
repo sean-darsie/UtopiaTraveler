@@ -73,7 +73,12 @@ public class FlightTest {
 		Mockito.when(flightService.getBookableFlights(1l, 2l, 1l)).thenReturn(null);
 		mockMvc.perform(MockMvcRequestBuilders.get("/traveler/travelers/1/flights/departure/1/arrival/2")
 			  	.accept(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.status().isNotFound());
+				.andExpect(MockMvcResultMatchers.status().isInternalServerError());
+		
+		Mockito.when(flightService.getBookableFlights(1l, 2l, 1l)).thenReturn(new Flight[0]);
+		mockMvc.perform(MockMvcRequestBuilders.get("/traveler/travelers/1/flights/departure/1/arrival/2")
+			  	.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isNoContent());
 		
 	}
 	

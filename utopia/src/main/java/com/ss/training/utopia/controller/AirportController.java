@@ -23,6 +23,7 @@ public class AirportController {
 		
 		if (airports == null) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			return new ResponseEntity<Airport[]>(airports, status);
 		}
 		if (airports.length == 0) {
 			status = HttpStatus.NO_CONTENT;

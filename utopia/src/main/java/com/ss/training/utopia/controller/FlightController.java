@@ -29,6 +29,7 @@ public class FlightController {
 		
 		if (flights == null) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			return new ResponseEntity<Flight[]>(flightArray, status);
 		}
 		if (flights.size() == 0) {
 			status = HttpStatus.NO_CONTENT;
@@ -45,9 +46,14 @@ public class FlightController {
 		HttpStatus status = HttpStatus.OK;
 		Flight[] flights = flightService.getBookableFlights(departId, arriveId, travelerId);
 		
-		if (flights == null || flights.length == 0 ) {
-			status = HttpStatus.NOT_FOUND;
+		if (flights == null) {
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			return new ResponseEntity<Flight[]>(flights, status);
 		}
+		if (flights.length == 0) {
+			status = HttpStatus.NO_CONTENT;
+		}
+		
 		
 		return new ResponseEntity<Flight[]>(flights, status);
 	}
