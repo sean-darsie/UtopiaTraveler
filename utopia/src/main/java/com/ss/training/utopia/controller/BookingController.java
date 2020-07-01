@@ -60,7 +60,7 @@ public class BookingController {
 	}
 	
 	
-	@RequestMapping(path="/bookings/purchasers/{id}")
+	@RequestMapping(path="/bookers/{id}/bookings")
 	public ResponseEntity<Booking[]> readPurchasedTickets(@PathVariable int bookerId) {
 		Booking[] bookings = null;
 		HttpStatus status = HttpStatus.OK;
@@ -77,14 +77,16 @@ public class BookingController {
 		return new ResponseEntity<Booking[]>(bookings, status);
 	}
 	
-	@RequestMapping(path = "/bookings/travelers/{id}")
+	@RequestMapping(path = "/travelers/{id}/bookings")
 	public ResponseEntity<Booking[]> readOwnedTickets(@PathVariable int travelerId) {
 		Booking[] bookings = null;
 		HttpStatus status = HttpStatus.OK;
 
 		bookings = bookingService.readActiveBookingByTravelerId(travelerId);
-		if (bookings == null) 
+		if (bookings == null) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			return new ResponseEntity<Booking[]>(bookings, status); 
+		}
 		if (bookings.length == 0) 
 			status = HttpStatus.NO_CONTENT;
 

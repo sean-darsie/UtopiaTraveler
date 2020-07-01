@@ -20,23 +20,20 @@ public class FlightController {
 	FlightService flightService;
 	
 	
-	@RequestMapping(path="/flights")
-	public ResponseEntity<Flight[]> readAvailableFlights() {
+	@RequestMapping(path="/travelers/{travelerId}/flights")
+	public ResponseEntity<Flight[]> readAvailableFlights(@PathVariable Long travelerId) {
 		HttpStatus status = HttpStatus.OK;
 		Flight[] flightArray = null;
 		
-		List<Flight> flights = flightService.readAvailableFlights();
+		flightArray = flightService.readAvailableFlights(travelerId);
 		
-		if (flights == null) {
+		if (flightArray == null) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 			return new ResponseEntity<Flight[]>(flightArray, status);
 		}
-		if (flights.size() == 0) {
+		if (flightArray.length == 0) 
 			status = HttpStatus.NO_CONTENT;
-		} else {
-			flightArray = flights.toArray(new Flight[flights.size()]);
-		}
-		
+			
 		return new ResponseEntity<Flight[]>(flightArray, status);
 	}
 	

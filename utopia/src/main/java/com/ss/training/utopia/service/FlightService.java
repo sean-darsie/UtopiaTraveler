@@ -52,14 +52,15 @@ public class FlightService {
 	 * 
 	 * @return List of flights that are after the date of now();
 	 */
-	public List<Flight> readAvailableFlights(){
-		List<Flight> flights = flightDAO.
-				findAll().
-				stream().
-				filter(f -> f.getDepartTime().after(Timestamp.valueOf(LocalDateTime.now()))).
-				collect(Collectors.toList());
+	public Flight[] readAvailableFlights(Long travelerId){
+		List<Flight> flights;
+		try {
+			flights = flightDAO.findAllFlightsByTraveler(travelerId);
+		} catch (Throwable t) {
+			return null;
+		}
 
-		return flights;
+		return flights.toArray(new Flight[flights.size()]);
 	}
 	
 }

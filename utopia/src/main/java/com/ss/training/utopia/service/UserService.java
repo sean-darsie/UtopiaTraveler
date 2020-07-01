@@ -1,6 +1,7 @@
 package com.ss.training.utopia.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ public class UserService {
 		if (user.getUserId() != null) {
 			return false;
 		}
-		
+		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		try {
 			userDAO.save(user);
 		} catch (RuntimeException t) {
