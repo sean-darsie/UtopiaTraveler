@@ -26,6 +26,9 @@ public interface FlightDAO extends JpaRepository<Flight, FlightPk> {
 	public List<Flight> findBookableFlights(Long departId, Long arriveId, Long travelerId);
 	
 
+	@Query("SELECT f FROM Flight f WHERE f.flightId NOT IN (SELECT b.flightId FROM Booking b WHERE b.travelerId = ?1 AND b.active = true)")
+	public List<Flight> findAllFlightsByTraveler(Long travelerId);
+
 	/**
 	 * Reduce the number of seats available by 1
 	 * @param flightId

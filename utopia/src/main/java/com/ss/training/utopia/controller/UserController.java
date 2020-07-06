@@ -1,8 +1,11 @@
 package com.ss.training.utopia.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +42,34 @@ public class UserController {
 		
 		user.setPassword(null);
 		return new ResponseEntity<User>(user, status);
+	}
+	
+	@RequestMapping(path="/users/{username}")
+	public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+		HttpStatus status = HttpStatus.OK;
+		
+		User user = userService.findUserByUsername(username);
+		
+		if (user == null) {
+			status = HttpStatus.NO_CONTENT;
+			return new ResponseEntity<User>(user, status);
+		}
+		user.setPassword(null);
+		return new ResponseEntity<User>(user, status);
+	}
+	
+	@RequestMapping(path="/travelers/{userId}")
+	public ResponseEntity<Optional<User>> getUserByUserid(@PathVariable Long userId) {
+		HttpStatus status = HttpStatus.OK;
+		
+		Optional<User> user = userService.findUserByUserId(userId);
+		
+		if (user.get() == null) {
+			status = HttpStatus.NO_CONTENT;
+			return new ResponseEntity<Optional<User>>(user, status);
+		}
+		user.get().setPassword(null);
+		return new ResponseEntity<Optional<User>>(user, status);
 	}
 	
 	@PutMapping(path="/users")

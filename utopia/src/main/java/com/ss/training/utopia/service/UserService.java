@@ -1,6 +1,9 @@
 package com.ss.training.utopia.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +22,7 @@ public class UserService {
 		if (user.getUserId() != null) {
 			return false;
 		}
-		
+		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		try {
 			userDAO.save(user);
 		} catch (RuntimeException t) {
@@ -44,6 +47,18 @@ public class UserService {
 		
 		try { 
 			user = userDAO.findByUsername(username);
+		} catch (Exception t) { 
+			return  null;
+		}
+		
+		return user;
+	}
+	
+	public Optional<User> findUserByUserId(Long userId) {
+		Optional<User> user = null;
+		
+		try { 
+			user = userDAO.findById(userId);
 		} catch (Exception t) { 
 			return  null;
 		}
