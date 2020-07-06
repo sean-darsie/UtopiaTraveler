@@ -62,5 +62,16 @@ public class FlightService {
 
 		return flights.toArray(new Flight[flights.size()]);
 	}
+
+	public Flight getFlightById(Long flightId) {
+		// TODO Auto-generated method stub
+		Flight flight = null;
+		try {
+			flight = flightDAO.findByFlightId(flightId);
+		} catch (Throwable t) {
+			return null;
+		}
+		return flight;
+	}
 	
 }

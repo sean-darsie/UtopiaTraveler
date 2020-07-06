@@ -55,4 +55,17 @@ public class FlightController {
 		return new ResponseEntity<Flight[]>(flights, status);
 	}
 	
+	@RequestMapping(path="/flights/{flightId}")
+	public ResponseEntity<Flight> readFlightById(@PathVariable Long flightId) {
+		HttpStatus status = HttpStatus.OK;
+		Flight flight = flightService.getFlightById(flightId);
+		
+		if (flight == null) {
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			return new ResponseEntity<Flight>(flight, status);
+		}
+		
+		return new ResponseEntity<Flight>(flight, status);
+	}
+	
 }

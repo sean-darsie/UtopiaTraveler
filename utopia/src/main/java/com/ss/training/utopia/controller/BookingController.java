@@ -60,7 +60,7 @@ public class BookingController {
 	}
 	
 	
-	@RequestMapping(path="/bookers/{id}/bookings")
+	@RequestMapping(path="/bookings/{bookerId}")
 	public ResponseEntity<Booking[]> readPurchasedTickets(@PathVariable int bookerId) {
 		Booking[] bookings = null;
 		HttpStatus status = HttpStatus.OK;
@@ -77,7 +77,7 @@ public class BookingController {
 		return new ResponseEntity<Booking[]>(bookings, status);
 	}
 	
-	@RequestMapping(path = "/travelers/{id}/bookings")
+	@RequestMapping(path = "/travelers/{travelerId}/bookings")
 	public ResponseEntity<Booking[]> readOwnedTickets(@PathVariable int travelerId) {
 		Booking[] bookings = null;
 		HttpStatus status = HttpStatus.OK;

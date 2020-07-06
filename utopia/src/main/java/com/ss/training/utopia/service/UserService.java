@@ -1,5 +1,7 @@
 package com.ss.training.utopia.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -45,6 +47,18 @@ public class UserService {
 		
 		try { 
 			user = userDAO.findByUsername(username);
+		} catch (Exception t) { 
+			return  null;
+		}
+		
+		return user;
+	}
+	
+	public Optional<User> findUserByUserId(Long userId) {
+		Optional<User> user = null;
+		
+		try { 
+			user = userDAO.findById(userId);
 		} catch (Exception t) { 
 			return  null;
 		}
