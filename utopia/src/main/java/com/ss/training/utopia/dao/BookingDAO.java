@@ -12,10 +12,10 @@ import com.ss.training.utopia.entity.BookingPk;
 @Repository
 public interface BookingDAO extends JpaRepository<Booking, BookingPk> {
 	
-	@Query("SELECT b FROM Booking b WHERE b.travelerId = ?1 AND b.active = 1")
+	@Query("SELECT b FROM Booking b WHERE b.travelerId = ?1 AND b.active = 1 ORDER BY flightId")
 	public List<Booking> findActiveBookingsByTravelerId(Long travelerId);
 	
-	@Query("SELECT b FROM Booking b WHERE b.travelerId = ?1 AND b.active = 0")
+	@Query("SELECT b FROM Booking b WHERE b.travelerId = ?1 AND b.active = 0 ORDER BY flightId")
 	public List<Booking> findInactiveBookingsByTravelerId(Long travelerId);
 
 	@Query("SELECT b FROM Booking b WHERE b.bookerId = ?1 AND b.active = 1")
