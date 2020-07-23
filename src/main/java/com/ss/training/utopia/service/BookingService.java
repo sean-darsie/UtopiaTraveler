@@ -111,7 +111,7 @@ public class BookingService {
 	
 	@Transactional
 	public boolean cancelFlight(Booking booking) throws StripeException {
-		Stripe.apiKey = "sk_test_51GvUChBYMFlMJbBRkCzD53Al0tYru5Zt7llUsjsbtfNH5TwY260VumPrZY6tK7481wgyUyTWalT1wQzQ2NNo5qTq00kZoYofR1";
+		Stripe.apiKey = System.getenv("STRIPE_KEY");
 		Flight flight = flightDAO.findByFlightId(booking.getFlightId());
 		
 		Map<String, Object> params = new HashMap<>();
