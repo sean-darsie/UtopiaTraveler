@@ -83,7 +83,7 @@ public class BookingService {
 	
 	@Transactional
 	public Booking purchaseFlight(long flightId, Long bookerId, Long travelerId, String token) throws StripeException {
-		Stripe.apiKey = "sk_test_51GvUChBYMFlMJbBRkCzD53Al0tYru5Zt7llUsjsbtfNH5TwY260VumPrZY6tK7481wgyUyTWalT1wQzQ2NNo5qTq00kZoYofR1";
+		Stripe.apiKey = System.getenv("STRIPE_KEY");
 		Flight flight = flightDAO.findByFlightId(flightId);
 		Charge charge;
 		
