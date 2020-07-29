@@ -16,7 +16,7 @@ import com.stripe.param.ChargeCreateParams;
 public class StripeDAO {
 	public String purchaseFlight(String token, Flight flight) throws StripeException {
 		
-		Stripe.apiKey = "sk_test_51GvUChBYMFlMJbBRkCzD53Al0tYru5Zt7llUsjsbtfNH5TwY260VumPrZY6tK7481wgyUyTWalT1wQzQ2NNo5qTq00kZoYofR1";
+		Stripe.apiKey = System.getenv("STRIPE_KEY");
 		Charge charge;
 		
 		ChargeCreateParams params =
@@ -33,7 +33,7 @@ public class StripeDAO {
 	}
 	
 	public void refundFlight(String stripeId) throws StripeException {
-		Stripe.apiKey = "sk_test_51GvUChBYMFlMJbBRkCzD53Al0tYru5Zt7llUsjsbtfNH5TwY260VumPrZY6tK7481wgyUyTWalT1wQzQ2NNo5qTq00kZoYofR1";
+		Stripe.apiKey = System.getenv("STRIPE_KEY");
 
 		Map<String, Object> params = new HashMap<>();
 		params.put(
