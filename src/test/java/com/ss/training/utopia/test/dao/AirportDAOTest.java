@@ -11,7 +11,7 @@ import com.ss.training.utopia.dao.AirportDAO;
 import com.ss.training.utopia.entity.Airport;
 
 @DataJpaTest
-public class AirportTest {
+public class AirportDAOTest {
 
 	@Autowired
 	AirportDAO airportDao;

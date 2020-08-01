@@ -29,7 +29,7 @@ import net.minidev.json.JSONObject;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
-public class FlightTest {
+public class FlightControllerTest {
 	private MockMvc mockMvc;
 	
 	@Mock
