@@ -15,7 +15,7 @@ import com.ss.training.utopia.entity.Booking;
 import com.ss.training.utopia.entity.Flight;
 
 @DataJpaTest
-public class FlightTest {
+public class FlightDAOTest {
 	
 	@Autowired
 	TestEntityManager testEntityManager;

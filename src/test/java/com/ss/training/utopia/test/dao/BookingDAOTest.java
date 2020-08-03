@@ -15,7 +15,7 @@ import com.ss.training.utopia.dao.BookingDAO;
 import com.ss.training.utopia.entity.Booking;
 
 @DataJpaTest
-public class BookingTest {
+public class BookingDAOTest {
 
 	@Autowired
 	TestEntityManager testEntityManager;
