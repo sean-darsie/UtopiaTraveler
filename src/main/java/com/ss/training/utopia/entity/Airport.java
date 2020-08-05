@@ -56,6 +56,7 @@ public class Airport implements Serializable {
 	public void setFlightsTo(List<Flight> flightsTo) {
 		this.flightsTo = flightsTo;
 	}
+	
 	@OneToMany
 	@JoinColumn(name="arriveId")
 	List<Flight> flightsTo;
