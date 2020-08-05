@@ -2,7 +2,6 @@ package com.ss.training.utopia.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,8 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+
 
 @Entity
 @Table(name="tbl_flight")
@@ -31,13 +33,13 @@ public class Flight implements Serializable {
 	@Column
 	Long arriveId;
 	
-	@Id
-	@ManyToOne()
+	@ManyToOne
+	@JsonManagedReference
 	@JoinColumn(name = "departId", referencedColumnName = "airportId",insertable=false, updatable=false)
 	private Airport departAirport;
 
-	@Id
 	@ManyToOne
+	@JsonManagedReference
 	@JoinColumn(name = "arriveId", referencedColumnName = "airportId",insertable=false, updatable=false)
 	private Airport arriveAirport;
 	

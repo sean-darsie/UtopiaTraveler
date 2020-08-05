@@ -15,12 +15,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.ss.training.utopia.controller.BookingController;
-import com.ss.training.utopia.controller.UserController;
 import com.ss.training.utopia.entity.Booking;
-import com.ss.training.utopia.entity.User;
 import com.ss.training.utopia.service.BookingService;
-import com.ss.training.utopia.service.UserService;
-import com.stripe.exception.StripeException;
 
 import net.minidev.json.JSONObject;
 

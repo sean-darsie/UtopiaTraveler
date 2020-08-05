@@ -3,16 +3,19 @@ package com.ss.training.utopia.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-//import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 @Entity
@@ -28,10 +31,16 @@ public class Airport implements Serializable {
 	
 	@Column(name="name")
 	private String name;
-
-	@OneToMany
+	
+	@JsonBackReference
+	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="departId")
 	List<Flight> flightsFrom;
+	
+	@JsonBackReference
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="arriveId")
+	List<Flight> flightsTo;
 	
 	public Airport(Long airportId, String name, List<Flight> flightsFrom, List<Flight> flightsTo) {
 		super();
@@ -57,9 +66,6 @@ public class Airport implements Serializable {
 		this.flightsTo = flightsTo;
 	}
 	
-	@OneToMany
-	@JoinColumn(name="arriveId")
-	List<Flight> flightsTo;
 	
 	public Airport(Long airportId, String name) {
 		super();
