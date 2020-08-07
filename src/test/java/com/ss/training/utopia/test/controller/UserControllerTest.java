@@ -48,15 +48,29 @@ public class UserControllerTest {
 		mockUser.put("password", "password");
 		mockUser.put("role", "TRAVELER");
 		
+		JSONObject longNameUser = new JSONObject();
+		longNameUser.put("username", "45characters at least aaaaddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+		longNameUser.put("name", "name");
+		longNameUser.put("password", "password");
+		longNameUser.put("role", "TRAVELER");
+		
 		User user = new User(null, "username", "name", "password", "TRAVELER");
 		
+		// Successful test
 		Mockito.when(userService.createUser(user)).thenReturn(true);
 		
 		mockMvc.perform(MockMvcRequestBuilders.post("/traveler/users")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mockUser.toJSONString()))
 		.andExpect(MockMvcResultMatchers.status().isCreated());
-
+		
+		// Name too long test.
+		mockMvc.perform(MockMvcRequestBuilders.post("/traveler/users")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(longNameUser.toJSONString()))
+		.andExpect(MockMvcResultMatchers.status().isBadRequest());
+		
+		// Unsuccessful database result test
 		Mockito.when(userService.createUser(user)).thenReturn(false);
 		
 		mockMvc.perform(MockMvcRequestBuilders.post("/traveler/users")

@@ -51,7 +51,7 @@ public class BookingController {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 
 			}
-		} catch(StripeException e) {
+		} catch(Exception e) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 			response = "failed to cancel flight";
 		}

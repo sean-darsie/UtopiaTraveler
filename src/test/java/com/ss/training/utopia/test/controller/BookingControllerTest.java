@@ -95,5 +95,12 @@ public class BookingControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mockBooking.toJSONString()))
 		.andExpect(MockMvcResultMatchers.status().isInternalServerError());
+		
+		Mockito.when(bookingService.cancelFlight(fakeBooking)).thenThrow(new RuntimeException("error message"));
+		mockMvc.perform(MockMvcRequestBuilders.put("/traveler/bookings")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mockBooking.toJSONString()))
+		.andExpect(MockMvcResultMatchers.status().isInternalServerError());
+
 	}
 }
