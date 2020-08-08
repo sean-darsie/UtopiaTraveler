@@ -106,5 +106,79 @@ public class UserControllerTest {
 		.andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 	
+	@Test 
+	public void getUserByUsernameSuccess() throws Exception {
+		JSONObject mockUser = new JSONObject();
+		mockUser.put("userId", 1l);
+		mockUser.put("username", "username");
+		mockUser.put("name", "name");
+		mockUser.put("password", null);
+		mockUser.put("role", "TRAVELER");
+		
+		User user = new User(1l, "username", "name", "password", "TRAVELER");
+		
+		Mockito.when(userService.findUserByUsername("username")).thenReturn(user);
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/traveler/users/username")
+				.accept(MediaType.APPLICATION_JSON)
+				.content(mockUser.toJSONString()))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.content().json(mockUser.toString()));
+	}
 	
+	@Test 
+	public void getUserByUsernameNoUserFound() throws Exception {
+		JSONObject mockUser = new JSONObject();
+		mockUser.put("userId", 1l);
+		mockUser.put("username", "username");
+		mockUser.put("name", "name");
+		mockUser.put("password", null);
+		mockUser.put("role", "TRAVELER");
+				
+		Mockito.when(userService.findUserByUsername("username")).thenReturn(null);
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/traveler/users/username")
+				.accept(MediaType.APPLICATION_JSON)
+				.content(mockUser.toJSONString()))
+		.andExpect(MockMvcResultMatchers.status().isNoContent());
+	}
+	
+	@Test 
+	public void getUserByUserIdSuccess() throws Exception {
+		JSONObject mockUser = new JSONObject();
+		mockUser.put("userId", 1l);
+		mockUser.put("username", "username");
+		mockUser.put("name", "name");
+		mockUser.put("password", null);
+		mockUser.put("role", "TRAVELER");
+		
+		User user = new User(1l, "username", "name", "password", "TRAVELER");
+		
+		Mockito.when(userService.findUserByUserId(1l)).thenReturn(user);
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/traveler/travelers/1")
+				.accept(MediaType.APPLICATION_JSON)
+				.content(mockUser.toJSONString()))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.content().json(mockUser.toString()));
+	}
+	
+	@Test 
+	public void getUserByUserIdNoUserFound() throws Exception {
+		JSONObject mockUser = new JSONObject();
+		mockUser.put("userId", 1l);
+		mockUser.put("username", "username");
+		mockUser.put("name", "name");
+		mockUser.put("password", "password");
+		mockUser.put("role", "TRAVELER");
+		
+		User user = new User(1l, "username", "name", "password", "TRAVELER");
+		
+		Mockito.when(userService.findUserByUserId(1l)).thenReturn(null);
+
+		mockMvc.perform(MockMvcRequestBuilders.get("/traveler/travelers/1")
+				.accept(MediaType.APPLICATION_JSON)
+				.content(mockUser.toJSONString()))
+		.andExpect(MockMvcResultMatchers.status().isNoContent());
+	}
 }

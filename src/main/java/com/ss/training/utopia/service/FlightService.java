@@ -17,27 +17,6 @@ public class FlightService {
 	@Autowired
 	FlightDAO flightDAO;
 	
-	public List<Flight> readFlights(){
-		return flightDAO.findAll();
-	}
-	
-	/**
-	 * 
-	 * @param departId
-	 * @param arriveId
-	 * @return a list of flights from depart city to arrive city past today's date.
-	 */
-	public List<Flight> readFlightsByDestination(Long departId,Long arriveId){
-		List<Flight> flights = flightDAO.
-				findAll().
-				stream().
-				filter(f -> (f.getDepartId() == departId && f.getArriveId() == arriveId)).
-				filter(f -> f.getDepartTime().after(Timestamp.valueOf(LocalDateTime.now()))).
-				collect(Collectors.toList());
-		
-		return flights;
-	}
-	
 	public Flight[] getBookableFlights(Long departId, Long arriveId, Long travelerId) {
 		List<Flight> flights;
 		try {

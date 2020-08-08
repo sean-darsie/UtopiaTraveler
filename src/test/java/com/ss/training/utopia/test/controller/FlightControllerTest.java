@@ -122,4 +122,32 @@ public class FlightControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isInternalServerError());
 	}
 	
+	@Test
+	public void findFlightByFlightIdSuccess() throws Exception {
+		Timestamp time = new Timestamp(1592971895172l);
+		Flight flight = new Flight(1l,2l,time, 20,100f,1l);
+		
+		JSONObject mockResponse = new JSONObject(); 
+		mockResponse.put("departId", 1l);
+		mockResponse.put("arriveId", 2l);
+		mockResponse.put("departTime", 1592971895172l);
+		mockResponse.put("seatsAvailable", 20);
+		mockResponse.put("price", 100f);
+		mockResponse.put("flightId", 1l);
+		
+		Mockito.when(flightService.getFlightById(1l)).thenReturn(flight);
+		mockMvc.perform(MockMvcRequestBuilders.get("/traveler/flights/1")
+			  	.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().json(mockResponse.toString()));
+
+	}
+	
+	@Test
+	public void findFlightByFlightIdNotFound() throws Exception {
+		Mockito.when(flightService.getFlightById(1l)).thenReturn(null);
+		mockMvc.perform(MockMvcRequestBuilders.get("/traveler/flights/1")
+			  	.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isInternalServerError());
+	}
 }

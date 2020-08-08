@@ -1,6 +1,10 @@
 package com.ss.training.utopia.test.controller;
 
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,12 +20,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.ss.training.utopia.controller.BookingController;
 import com.ss.training.utopia.controller.UserController;
+import com.ss.training.utopia.entity.Airport;
 import com.ss.training.utopia.entity.Booking;
 import com.ss.training.utopia.entity.User;
 import com.ss.training.utopia.service.BookingService;
 import com.ss.training.utopia.service.UserService;
 import com.stripe.exception.StripeException;
 
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
 
@@ -101,6 +107,51 @@ public class BookingControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mockBooking.toJSONString()))
 		.andExpect(MockMvcResultMatchers.status().isInternalServerError());
+
+	}
+	
+	@Test
+	public void getBookingsByUserSuccess() throws Exception {
+		List<Booking> listBookings = new ArrayList<Booking>();
+		listBookings.add(new Booking(1l,1l, 1l, true, "token"));
+		Booking[] bookings = listBookings.toArray(new Booking[listBookings.size()]);
+		
+		JSONArray bookingArray = new JSONArray();
+
+		JSONObject mockBooking = new JSONObject(); 
+		mockBooking.put("flightId", 1l);
+		mockBooking.put("bookerId", 1l);
+		mockBooking.put("travelerId", 1l);
+		mockBooking.put("active", true);
+		mockBooking.put("stripeId", "token");
+		
+		bookingArray.add(mockBooking);
+		
+		Mockito.when(bookingService.readActiveBookingByTravelerId(1l)).thenReturn(bookings);
+		
+		mockMvc.perform(MockMvcRequestBuilders.put("/traveler/bookings/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mockBooking.toJSONString()))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.content().json(bookingArray.toString()));
+	}
+	
+	@Test
+	public void getBookingsByUserFaileScenario() throws Exception {
+		Mockito.when(bookingService.readActiveBookingByTravelerId(1l)).thenReturn(null);
+		
+		mockMvc.perform(MockMvcRequestBuilders.put("/traveler/bookings/1")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(MockMvcResultMatchers.status().isInternalServerError());
+	}
+	
+	@Test
+	public void getBookingsByUserNoBookings() throws Exception {
+		Mockito.when(bookingService.readActiveBookingByTravelerId(1l)).thenReturn(new Booking[0]);
+		
+		mockMvc.perform(MockMvcRequestBuilders.put("/traveler/bookings/1")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(MockMvcResultMatchers.status().isNoContent());
 
 	}
 }
