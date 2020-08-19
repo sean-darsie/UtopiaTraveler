@@ -59,17 +59,17 @@ public class UserController {
 	}
 	
 	@RequestMapping(path="/travelers/{userId}")
-	public ResponseEntity<Optional<User>> getUserByUserid(@PathVariable Long userId) {
+	public ResponseEntity<User> getUserByUserid(@PathVariable Long userId) {
 		HttpStatus status = HttpStatus.OK;
 		
-		Optional<User> user = userService.findUserByUserId(userId);
+		User user = userService.findUserByUserId(userId);
 		
-		if (user.get() == null) {
+		if (user == null) {
 			status = HttpStatus.NO_CONTENT;
-			return new ResponseEntity<Optional<User>>(user, status);
+			return new ResponseEntity<User>(user, status);
 		}
-		user.get().setPassword(null);
-		return new ResponseEntity<Optional<User>>(user, status);
+		user.setPassword(null);
+		return new ResponseEntity<User>(user, status);
 	}
 	
 	@PutMapping(path="/users")

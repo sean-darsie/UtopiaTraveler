@@ -41,16 +41,6 @@ public class BookingService {
 		bookingDAO.save(booking);
 	}
 	
-	public List<Booking> readBookings() {
-		List<Booking> bookings = bookingDAO.
-				findAll().
-				stream().
-				filter(b -> b.isActive() == true).
-				collect(Collectors.toList()); 
-		
-		return bookings;
-	}
-	
 	/**
 	 * 
 	 * @param bookerId
@@ -77,11 +67,11 @@ public class BookingService {
 		List<Booking> bookings;
 		try {
 			bookings = bookingDAO.findActiveBookingsByTravelerId(travelerId);
+			activeBookings = bookings.toArray(new Booking[bookings.size()]);
 		} catch (Exception e) {
 			return activeBookings;
 		}
 		
-		activeBookings = bookings.toArray(new Booking[bookings.size()]);
 		return activeBookings;
 	}
 	

@@ -48,16 +48,6 @@ public class BookingServiceTest {
 	}
 	
 	@Test
-	public void readActiveBookingByTravelerId() {
-		Booking bookingActive = new Booking();
-		List<Booking> mockBookings = new ArrayList<Booking>();
-		mockBookings.add(bookingActive);
-		
-		Mockito.when(bookingDAO.findActiveBookingsByTravelerId(1l)).thenReturn(mockBookings);
-		assertEquals(1, bookingService.readActiveBookingByTravelerId(1l).length);
-	}
-	
-	@Test
 	public void purchaseTicket() throws StripeException { 
 		// mock data
 		String token = "stripe token";
@@ -81,6 +71,25 @@ public class BookingServiceTest {
 		bookingService.cancelFlight(mockBooking);
 		
 		assertEquals(false, mockBooking.isActive());
+	}
+	
+	
+	@Test
+	public void readActiveBookingByTravelerIdSuccess() {
+		Booking bookingActive = new Booking();
+		List<Booking> mockBookings = new ArrayList<Booking>();
+		mockBookings.add(bookingActive);
+		
+		Mockito.when(bookingDAO.findActiveBookingsByTravelerId(1l)).thenReturn(mockBookings);
+		assertEquals(1, bookingService.readActiveBookingByTravelerId(1l).length);
+	}
+	
+	
+	@Test
+	public void readActiveBookingByTravelerIdFail() {
+		Mockito.when(bookingDAO.findActiveBookingsByTravelerId(1l)).thenThrow(new RuntimeException());
+
+		assertEquals(null, bookingService.readActiveBookingByTravelerId(1l));
 	}
 	
 }

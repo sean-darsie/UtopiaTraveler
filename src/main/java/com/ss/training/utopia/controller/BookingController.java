@@ -51,7 +51,7 @@ public class BookingController {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 
 			}
-		} catch(StripeException e) {
+		} catch(Exception e) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 			response = "failed to cancel flight";
 		}
@@ -60,12 +60,12 @@ public class BookingController {
 	}
 	
 	
-	@RequestMapping(path="/bookings/{bookerId}")
-	public ResponseEntity<Booking[]> readPurchasedTickets(@PathVariable int bookerId) {
+	@RequestMapping(path="/bookings/{travelerId}")
+	public ResponseEntity<Booking[]> readPurchasedTickets(@PathVariable int travelerId) {
 		Booking[] bookings = null;
 		HttpStatus status = HttpStatus.OK;
 
-		bookings = bookingService.readActiveBookingByBookerId(bookerId);
+		bookings = bookingService.readActiveBookingByTravelerId(travelerId);
 		if (bookings == null) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 			return new ResponseEntity<Booking[]>(bookings, status);
@@ -74,22 +74,6 @@ public class BookingController {
 			status = HttpStatus.NO_CONTENT;
 		}
 		
-		return new ResponseEntity<Booking[]>(bookings, status);
-	}
-	
-	@RequestMapping(path = "/travelers/{travelerId}/bookings")
-	public ResponseEntity<Booking[]> readOwnedTickets(@PathVariable int travelerId) {
-		Booking[] bookings = null;
-		HttpStatus status = HttpStatus.OK;
-
-		bookings = bookingService.readActiveBookingByTravelerId(travelerId);
-		if (bookings == null) {
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
-			return new ResponseEntity<Booking[]>(bookings, status); 
-		}
-		if (bookings.length == 0) 
-			status = HttpStatus.NO_CONTENT;
-
 		return new ResponseEntity<Booking[]>(bookings, status);
 	}
 	
