@@ -1,14 +1,21 @@
 package com.ss.training.utopia.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-//import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 @Entity
@@ -24,7 +31,41 @@ public class Airport implements Serializable {
 	
 	@Column(name="name")
 	private String name;
+	
+	@JsonBackReference
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="departId")
+	List<Flight> flightsFrom;
+	
+	@JsonBackReference
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="arriveId")
+	List<Flight> flightsTo;
+	
+	public Airport(Long airportId, String name, List<Flight> flightsFrom, List<Flight> flightsTo) {
+		super();
+		this.airportId = airportId;
+		this.name = name;
+		this.flightsFrom = flightsFrom;
+		this.flightsTo = flightsTo;
+	}
 
+	public List<Flight> getFlightsFrom() {
+		return flightsFrom;
+	}
+
+	public void setFlightsFrom(List<Flight> flightsFrom) {
+		this.flightsFrom = flightsFrom;
+	}
+
+	public List<Flight> getFlightsTo() {
+		return flightsTo;
+	}
+
+	public void setFlightsTo(List<Flight> flightsTo) {
+		this.flightsTo = flightsTo;
+	}
+	
 	
 	public Airport(Long airportId, String name) {
 		super();
@@ -41,6 +82,8 @@ public class Airport implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((airportId == null) ? 0 : airportId.hashCode());
+		result = prime * result + ((flightsFrom == null) ? 0 : flightsFrom.hashCode());
+		result = prime * result + ((flightsTo == null) ? 0 : flightsTo.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -59,6 +102,16 @@ public class Airport implements Serializable {
 			if (other.airportId != null)
 				return false;
 		} else if (!airportId.equals(other.airportId))
+			return false;
+		if (flightsFrom == null) {
+			if (other.flightsFrom != null)
+				return false;
+		} else if (!flightsFrom.equals(other.flightsFrom))
+			return false;
+		if (flightsTo == null) {
+			if (other.flightsTo != null)
+				return false;
+		} else if (!flightsTo.equals(other.flightsTo))
 			return false;
 		if (name == null) {
 			if (other.name != null)

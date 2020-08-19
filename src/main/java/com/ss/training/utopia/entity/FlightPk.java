@@ -9,26 +9,29 @@ public class FlightPk implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 8483614852903557043L;
-	Long departId;
-	Long arriveId;
+	Airport departAirport;
+	Airport arriveAirport;
 	Timestamp departTime;
 	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((arriveId == null) ? 0 : arriveId.hashCode());
-		result = prime * result + ((departId == null) ? 0 : departId.hashCode());
+		result = prime * result + ((arriveAirport == null) ? 0 : arriveAirport.hashCode());
+		result = prime * result + ((departAirport == null) ? 0 : departAirport.hashCode());
 		result = prime * result + ((departTime == null) ? 0 : departTime.hashCode());
 		return result;
 	}
 	
-	public FlightPk(Long departId, Long arriveId, Timestamp departTime) {
-		this.departId = departId;
-		this.arriveId = arriveId;
+	
+	public FlightPk(Airport departAirport, Airport arriveAirport, Timestamp departTime) {
+		super();
+		this.departAirport = departAirport;
+		this.arriveAirport = arriveAirport;
 		this.departTime = departTime;
 	}
-	
+
+
 	public FlightPk() {}
 
 
@@ -41,15 +44,15 @@ public class FlightPk implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		FlightPk other = (FlightPk) obj;
-		if (arriveId == null) {
-			if (other.arriveId != null)
+		if (arriveAirport == null) {
+			if (other.arriveAirport != null)
 				return false;
-		} else if (!arriveId.equals(other.arriveId))
+		} else if (!arriveAirport.equals(other.arriveAirport))
 			return false;
-		if (departId == null) {
-			if (other.departId != null)
+		if (departAirport == null) {
+			if (other.departAirport != null)
 				return false;
-		} else if (!departId.equals(other.departId))
+		} else if (!departAirport.equals(other.departAirport))
 			return false;
 		if (departTime == null) {
 			if (other.departTime != null)

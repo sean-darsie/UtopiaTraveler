@@ -22,10 +22,7 @@ import com.ss.training.utopia.controller.BookingController;
 import com.ss.training.utopia.controller.UserController;
 import com.ss.training.utopia.entity.Airport;
 import com.ss.training.utopia.entity.Booking;
-import com.ss.training.utopia.entity.User;
 import com.ss.training.utopia.service.BookingService;
-import com.ss.training.utopia.service.UserService;
-import com.stripe.exception.StripeException;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
