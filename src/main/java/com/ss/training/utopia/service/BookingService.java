@@ -77,6 +77,7 @@ public class BookingService {
 	
 	@Transactional
 	public Booking purchaseFlight(long flightId, Long bookerId, Long travelerId, String token) throws StripeException {
+		Stripe.apiKey = System.getenv("STRIPE_KEY");
 		Flight flight = flightDAO.findByFlightId(flightId);
 		String stripeToken;
 		
@@ -99,6 +100,7 @@ public class BookingService {
 	
 	@Transactional
 	public boolean cancelFlight(Booking booking) throws StripeException {
+		Stripe.apiKey = System.getenv("STRIPE_KEY");
 		Flight flight = flightDAO.findByFlightId(booking.getFlightId());
 		
 		try {
