@@ -34,6 +34,18 @@
 		  <artifactId>stripe-java</artifactId>
 		  <version>19.23.0</version>
 		</dependency>
+	    <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
+	    <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+	    </dependency>
+   		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.2</version>
+		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -87,6 +99,17 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>
+					org.sonarsource.scanner.maven
+				</groupId>
+				<artifactId>
+					sonar-maven-plugin
+				</artifactId>
+				<version>
+					3.7.0.1746
+				</version>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

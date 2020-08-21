@@ -13,7 +13,7 @@ import com.ss.training.utopia.dao.UserDAO;
 import com.ss.training.utopia.entity.User;
 
 @DataJpaTest
-public class UserTest {
+public class UserDAOTest {
 	
 	@Autowired
 	private UserDAO userDao;

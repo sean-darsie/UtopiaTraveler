@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ss.training.utopia.dao.BookingDAO;
 import com.ss.training.utopia.dao.FlightDAO;
+import com.ss.training.utopia.dao.StripeDAO;
 import com.ss.training.utopia.entity.Booking;
 import com.ss.training.utopia.entity.Flight;
 import com.stripe.Stripe;
@@ -29,22 +30,15 @@ public class BookingService {
 	@Autowired
 	FlightDAO flightDAO;
 	
+	@Autowired
+	StripeDAO stripeDAO;
+	
 	public void saveBooking(Booking booking) {
 		bookingDAO.save(booking);
 	}
 	
 	public void updateBooking(Booking booking) {
 		bookingDAO.save(booking);
-	}
-	
-	public List<Booking> readBookings() {
-		List<Booking> bookings = bookingDAO.
-				findAll().
-				stream().
-				filter(b -> b.isActive() == true).
-				collect(Collectors.toList()); 
-		
-		return bookings;
 	}
 	
 	/**
@@ -73,11 +67,11 @@ public class BookingService {
 		List<Booking> bookings;
 		try {
 			bookings = bookingDAO.findActiveBookingsByTravelerId(travelerId);
+			activeBookings = bookings.toArray(new Booking[bookings.size()]);
 		} catch (Exception e) {
 			return activeBookings;
 		}
 		
-		activeBookings = bookings.toArray(new Booking[bookings.size()]);
 		return activeBookings;
 	}
 	
@@ -85,21 +79,16 @@ public class BookingService {
 	public Booking purchaseFlight(long flightId, Long bookerId, Long travelerId, String token) throws StripeException {
 		Stripe.apiKey = System.getenv("STRIPE_KEY");
 		Flight flight = flightDAO.findByFlightId(flightId);
-		Charge charge;
+		String stripeToken;
 		
-		ChargeCreateParams params =
-				  ChargeCreateParams.builder()
-				    .setAmount(100l)
-				    .setCurrency("usd")
-				    .setDescription("Example charge")
-				    .setSource(token)
-				    .build();
+		try {
+			stripeToken = stripeDAO.purchaseFlight(token, flight);
+		} catch(StripeException e) {
+			return null;
+		}
 		
-		charge = Charge.create(params);
-
-		System.out.println(charge.toString());
 		// create new booking to put in the database;
-		Booking newBooking = new Booking(travelerId, flightId, bookerId, true, charge.getId());
+		Booking newBooking = new Booking(travelerId, flightId, bookerId, true, stripeToken);
 		flight.setSeatsAvailable(flight.getSeatsAvailable() - 1);
 		
 		
@@ -114,13 +103,12 @@ public class BookingService {
 		Stripe.apiKey = System.getenv("STRIPE_KEY");
 		Flight flight = flightDAO.findByFlightId(booking.getFlightId());
 		
-		Map<String, Object> params = new HashMap<>();
-		params.put(
-		  "charge",
-		  booking.getStripeId()
-		);
-
-		Refund refund = Refund.create(params);
+		try {
+			stripeDAO.refundFlight(booking.getStripeId());
+		} catch (StripeException e) {
+			return false;
+		}
+		
 		flight.setSeatsAvailable(flight.getSeatsAvailable() + 1);
 				
 		try {

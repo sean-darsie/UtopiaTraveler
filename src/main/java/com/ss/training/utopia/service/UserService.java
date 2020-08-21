@@ -1,5 +1,6 @@
 package com.ss.training.utopia.service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class UserService {
 		return user;
 	}
 	
-	public Optional<User> findUserByUserId(Long userId) {
+	public User findUserByUserId(Long userId) {
 		Optional<User> user = null;
 		
 		try { 
@@ -62,7 +63,13 @@ public class UserService {
 		} catch (Exception t) { 
 			return  null;
 		}
+		User userObj = null;
+		try {
+			userObj = user.get();
+		} catch(NoSuchElementException e) {
+			return null;
+		}
 		
-		return user;
+		return userObj;
 	}
 }
